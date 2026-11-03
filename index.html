@@ -16,7 +16,7 @@
 <body>
 <header class="topbar"><div class="brand"><span class="brandmark">т</span> Триптих</div><div class="top-note"><span class="dot"></span> Все фотографии остаются на вашем устройстве</div></header>
 <main class="page">
-<section class="intro"><div><div class="eyebrow">Простая фотомастерская</div><h1>Три кадра.<br>Одна история.</h1><p>Соберите серию фотографий в аккуратные коллажи: один широкий кадр сверху, два — в нижнем ряду. Добавьте свою подпись и сохраните результат.</p></div><div class="counter" id="counter">0 фотографий · 0 коллажей</div></section>
+<section class="intro"><div><div class="eyebrow">Простая фотомастерская</div><h1>Три кадра.<br>Одна история.</h1><p>Соберите серию фотографий в аккуратные коллажи: один широкий кадр сверху, два — в нижнем ряду. Добавьте отдельную подпись к каждому и сохраните результат.</p></div><div class="counter" id="counter">0 фотографий · 0 коллажей</div></section>
 <div class="workspace">
 <aside class="panel">
 <h2>Настройки</h2>
@@ -38,7 +38,7 @@ uploadBtn.addEventListener('dragover',e=>{e.preventDefault();uploadBtn.classList
 uploadBtn.addEventListener('dragleave',()=>uploadBtn.classList.remove('drag'));
 uploadBtn.addEventListener('drop',e=>{e.preventDefault();uploadBtn.classList.remove('drag');addFiles(e.dataTransfer.files)});
 
-clearBtn.addEventListener('click',()=>{urls.forEach(URL.revokeObjectURL);urls=[];photos=[];render();});
+clearBtn.addEventListener('click',()=>{urls.forEach(URL.revokeObjectURL);urls=[];photos=[];captions=[];render();});
 function showNotice(text){notice.textContent=text;notice.classList.add('show');clearTimeout(messageTimer);messageTimer=setTimeout(()=>notice.classList.remove('show'),2600)}
 function render(){const groups=Math.ceil(photos.length/3);counter.textContent=photos.length+' фотограф'+(photos.length===1?'ия':photos.length<5?'ии':'ий')+' · '+groups+' коллаж'+(groups===1?'':groups<5?'а':'ей');clearBtn.hidden=!photos.length;if(!photos.length){gallery.innerHTML='<div class="empty"><div><div class="empty-art"><span></span><span></span><span></span></div><h3>Здесь начнётся ваша история</h3><p>Добавьте фотографии, чтобы собрать первый коллаж.<br>Для каждого нужно 3 фото.</p></div></div>';return}
 gallery.innerHTML='';for(let g=0;g<groups;g++){const triplet=photos.slice(g*3,g*3+3),complete=triplet.length===3,card=document.createElement('article');card.className='card';card.innerHTML='<div class="cardtop"><span class="cardnum">Коллаж '+String(g+1).padStart(2,'0')+(complete?'':' · не хватает '+(3-triplet.length))+'</span><div class="card-actions"><button class="iconbtn" title="Удалить этот набор" aria-label="Удалить набор" data-remove="'+g+'">×</button></div></div><label class="card-caption"><span>Подпись для этого коллажа</span><input class="text-input caption-input" data-caption="'+g+'" maxlength="160" value="'+escapeHtml(captions[g]||'')+'" placeholder="Например, 12 июня · озеро Комо"></label><div class="canvas-wrap"><canvas width="900" height="1260"></canvas></div><div class="cardbottom"><span>'+triplet.length+' из 3 фотографий</span><button class="download" data-download="'+g+'" '+(complete?'':'disabled')+'><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 17v4h16v-4"/></svg> Скачать PNG</button></div>';gallery.appendChild(card);drawCanvas(card.querySelector('canvas'),triplet,complete,captions[g]||'');}}
